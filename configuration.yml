@@ -1,0 +1,57 @@
+sensor:
+  - platform: rest
+    name: Solax AC Power
+    resource: !secret solax_api_url
+    method: POST
+    payload: !secret solax_api_payload
+    headers:
+      Content-Type: application/json
+      tokenId: !secret solax_api_token
+    value_template: "{{ value_json.result.acpower }}"
+    unit_of_measurement: "W"
+    scan_interval: 1
+    device_class: power
+    state_class: measurement
+
+  - platform: rest
+    name: Solax Yield Today
+    resource: !secret solax_api_url
+    method: POST
+    payload: !secret solax_api_payload
+    headers:
+      Content-Type: application/json
+      tokenId: !secret solax_api_token
+    value_template: "{{ value_json.result.yieldtoday }}"
+    unit_of_measurement: "kWh"
+    scan_interval: 60
+    device_class: energy
+    state_class: total_increasing
+
+  - platform: rest
+    name: Solax Yield Total
+    resource: !secret solax_api_url
+    method: POST
+    payload: !secret solax_api_payload
+    headers:
+      Content-Type: application/json
+      tokenId: !secret solax_api_token
+    value_template: "{{ value_json.result.yieldtotal }}"
+    unit_of_measurement: "kWh"
+    scan_interval: 60
+    device_class: energy
+    state_class: total_increasing
+
+  - platform: rest
+    name: Solax DC Power Total
+    resource: !secret solax_api_url
+    method: POST
+    payload: !secret solax_api_payload
+    headers:
+      Content-Type: application/json
+      tokenId: !secret solax_api_token
+    value_template: >
+      {{ (value_json.result.powerdc1 | float(0)) + (value_json.result.powerdc2 | float(0)) }}
+    unit_of_measurement: "W"
+    scan_interval: 1
+    device_class: power
+    state_class: measurement
