@@ -28,7 +28,7 @@ sensor:
       tokenId: !secret solax_api_token
     value_template: "{{ value_json.result.acpower }}"
     unit_of_measurement: "W"
-    scan_interval: 1
+    scan_interval: 10
     device_class: power
     state_class: measurement
 
@@ -71,7 +71,7 @@ sensor:
     value_template: >
       {{ (value_json.result.powerdc1 | float(0)) + (value_json.result.powerdc2 | float(0)) }}
     unit_of_measurement: "W"
-    scan_interval: 1
+    scan_interval: 10
     device_class: power
     state_class: measurement
 ```
