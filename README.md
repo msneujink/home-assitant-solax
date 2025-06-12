@@ -1,4 +1,4 @@
-# Solax Inverter integration for Home Assitant.
+# Solax Inverter integration for Home Assitant
 This integration allows you to monitor your Solax solar inverter’s real-time data directly in Home Assistant using the official Solax Cloud API. It fetches key metrics such as AC power output, daily and total energy yield, and combined DC power from your inverter via REST sensors.
 
 By following the instructions below, you will be able to add these sensors to your Home Assistant setup and use them for monitoring, automation, and integration with the Home Assistant Energy Dashboard.
