@@ -3,9 +3,8 @@ This integration allows you to monitor your Solax solar inverter’s real-time d
 
 By following the instructions below, you will be able to add these sensors to your Home Assistant setup and use them for monitoring, automation, and integration with the Home Assistant Energy Dashboard.
 
-If you encounter API limitation issues try adjusting the `scan_interval`
-
 ## Add the secrets to secrets.yml
+You can find your serial number and token by logging into your account at solaxcloud.com.
 
 ```yml
 solax_api_url: https://global.solaxcloud.com/api/v2/dataAccess/realtimeInfo/get
@@ -14,7 +13,8 @@ solax_api_payload: '{"wifiSn": "YOUR_SERIAL"}'
 ```
 
 
-## Add the following to the configuration.yml
+## Add the following to the Home Assitant configuration.yml
+If you encounter API limitation issues try adjusting the `scan_interval`.
 
 ```yml
 sensor:
