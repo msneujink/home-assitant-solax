@@ -1,57 +1,48 @@
 sensor:
   - platform: rest
-    name: Solax AC Power
+    name: "Solax Inverter"
     resource: !secret solax_api_url
     method: POST
     payload: !secret solax_api_payload
     headers:
       Content-Type: application/json
       tokenId: !secret solax_api_token
-    value_template: "{{ value_json.result.acpower }}"
-    unit_of_measurement: "W"
-    scan_interval: 10
-    device_class: power
-    state_class: measurement
-
-  - platform: rest
-    name: Solax Yield Today
-    resource: !secret solax_api_url
-    method: POST
-    payload: !secret solax_api_payload
-    headers:
-      Content-Type: application/json
-      tokenId: !secret solax_api_token
-    value_template: "{{ value_json.result.yieldtoday }}"
-    unit_of_measurement: "kWh"
+    value_template: "{{ value_json.result.acpower }}"  # just a placeholder
+    json_attributes_path: "$.result"
+    json_attributes:
+      - acpower
+      - yieldtoday
+      - yieldtotal
+      - powerdc1
+      - powerdc2
     scan_interval: 60
-    device_class: energy
-    state_class: total_increasing
 
-  - platform: rest
-    name: Solax Yield Total
-    resource: !secret solax_api_url
-    method: POST
-    payload: !secret solax_api_payload
-    headers:
-      Content-Type: application/json
-      tokenId: !secret solax_api_token
-    value_template: "{{ value_json.result.yieldtotal }}"
-    unit_of_measurement: "kWh"
-    scan_interval: 60
-    device_class: energy
-    state_class: total_increasing
-
-  - platform: rest
-    name: Solax DC Power Total
-    resource: !secret solax_api_url
-    method: POST
-    payload: !secret solax_api_payload
-    headers:
-      Content-Type: application/json
-      tokenId: !secret solax_api_token
-    value_template: >
-      {{ (value_json.result.powerdc1 | float(0)) + (value_json.result.powerdc2 | float(0)) }}
-    unit_of_measurement: "W"
-    scan_interval: 10
-    device_class: power
-    state_class: measurement
+template:
+  - sensor:
+      - name: "Solax AC Power"
+        unique_id: solax_ac_power
+        unit_of_measurement: "W"
+        device_class: power
+        state_class: measurement
+        state: "{{ state_attr('sensor.solax_inverter', 'acpower') | float(0) }}"
+      - name: "Solax Yield Today"
+        unique_id: solax_yield_today
+        unit_of_measurement: "kWh"
+        device_class: energy
+        state_class: total_increasing
+        state: "{{ state_attr('sensor.solax_inverter', 'yieldtoday') | float(0) }}"
+      - name: "Solax Yield Total"
+        unique_id: solax_yield_total
+        unit_of_measurement: "kWh"
+        device_class: energy
+        state_class: total_increasing
+        state: "{{ state_attr('sensor.solax_inverter', 'yieldtotal') | float(0) }}"
+      - name: "Solax DC Power Total"
+        unique_id: solax_dc_power_total
+        unit_of_measurement: "W"
+        device_class: power
+        state_class: measurement
+        state: >
+          {% set dc1 = state_attr('sensor.solax_inverter', 'powerdc1') | float(0) %}
+          {% set dc2 = state_attr('sensor.solax_inverter', 'powerdc2') | float(0) %}
+          {{ dc1 + dc2 }}
